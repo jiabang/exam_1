@@ -1,5 +1,7 @@
 package Mapp.exam_io;
 
+import java.io.BufferedOutputStream;
+
 /**
  * Hello world!
  *
@@ -12,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+
 /**
  *
  */
@@ -19,8 +22,7 @@ public class App
 {
     public static void main( String[] args ){
     	
-    	int bytesum=0;
-    	int byteread=0;
+    
     	URL url=null;
     	try {
 			url=new URL("http://www.madore.org/~david/math/padics.pdf");
@@ -31,14 +33,22 @@ public class App
 		}
         try {
 			URLConnection conn = url.openConnection();
-			InputStream instream= conn.getInputStream();
+			InputStream in= conn.getInputStream();
 			FileOutputStream fs =new FileOutputStream("padics_new.pdf");
+			
+			BufferedOutputStream bf= new BufferedOutputStream(fs);	
+			
 			byte put[] =new byte[1024];
-			while((byteread=instream.read(put) ) !=-1){
-				bytesum=bytesum+byteread;
-				fs.write(put,0,byteread);
-						
+			int len;
+			while((len=in.read(put) ) !=-1){				
+							
+				bf.write(put,0,len);
 			}
+			bf.close();
+			fs.close();
+			in.close();
+			
+			System.out.println("done");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
